@@ -1,0 +1,68 @@
+us1 = User.objects.create_user('Михаил')
+us2 = User.objects.create_user('Антон')
+at1 = Author.objects.create(user = us1)
+at2 = Author.objects.create(user = us2)
+Category.objects.create(category_theme='Спорт')
+Category.objects.create(category_theme='Кино') 
+Category.objects.create(category_theme='Искусство')
+Category.objects.create(category_theme='Животные')
+post1 = Post.objects.create(author = a1, post_type = 'news', post_text = 'Netfkix хочет выкупить Warner Bros.')
+post2 = Post.objects.create(author = a1, post_type = 'stat', post_text = 'Текст очень длинной статьи более 124 символов. Статья состоит из симврлов А.АААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААААА')
+post3 = Post.objects.create(author = a2, post_type = 'stat', post_text = 'Просто короткая статья')
+
+Post.objects.filter(id=4).update(post_title = 'Короткая статья')
+Post.objects.filter(id=1).update(post_title = 'Покупочки, покупочки!!!')
+
+ Category.objects.all().values()
+cat_kino = Category.objects.get(id=2)
+cat_sport = Category.objects.get(id=1)
+cat_isk = Category.objects.get(id=3)
+cat_anm = Category.objects.get(id=4)
+post1.post_category.add(cat_kino)
+post1.post_category.add(cat_isk) 
+post2.post_category.add(cat_anm)
+post3.post_category.add(cat_sport)
+u1 = User.objects.all().last()
+u2 = User.objects.all().first()
+Comment.objects.create(post_comment=post1, comment_text='Первый', user_comment=u2)
+Comment.objects.create(post_comment=post1, comment_text='Похоже на монополию', user_comment=u1)
+Comment.objects.create(post_comment=post1, comment_text='Так и живем', user_comment=u2)
+Comment.objects.create(post_comment=post2, comment_text='Прикольно ААААА...))', user_comment=u2)
+Comment.objects.create(post_comment=post2, comment_text='Улыбнуло)', user_comment=u1) 
+Comment.objects.create(post_comment=post3, comment_text='Ничего интересного', user_comment=u1)
+
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+>>> post1.like()
+
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+>>> post3.dislike()
+
+>>> post2.like()   
+>>> post2.like()
+>>> post2.like()
+>>> post2.like()
+
+>>> a1.update_rating()        
+>>> a2.update_rating()
+>>> post2.like()
+
+>>> great_author=Author.objects.order_by('-author_rat').first()
+>>> great_author.user.username
+
+>>> great_author.user.date_joined   
+>>> great_author.author_rat  
+>>> best_stat = Post.objects.filter(author = great_author).order_by('-post_rate').first()
+>>> best_stat.post_title
+>>> best_stat.preview()
+>>> comments = Comment.objects.filter(post_comment = best_stat)
+>>> comments.values()
