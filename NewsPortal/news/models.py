@@ -47,6 +47,8 @@ class Post(models.Model):
         self.save()
     def preview(self):
         return self.post_text[:124] + "..."
+    def __str__(self):
+        return self.post_text
 
 
 class PostCategory(models.Model):

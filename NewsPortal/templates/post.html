@@ -1,0 +1,25 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+<h1>Полное содержание статьи\новости</h1>
+<table>
+    <tr>
+        <td>Заголовок статьи</td>
+        <td>Дата размещения</td>
+        <td>Текст статьи</td>
+    </tr>
+    {% if post %}
+    <tr>
+        <td>{{post.post_title}}</td>
+        <td>{{post.post_date|date:"d M Y"}}</td>
+        <td>{{ post.post_text }}</td>
+    </tr>
+    {% else %}
+        Такой новости нет
+    {% endif %}
+</table>
+{% endblock content %}
