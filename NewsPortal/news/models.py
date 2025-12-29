@@ -1,11 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.urls import reverse
 
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     author_rat = models.IntegerField(default = 0)
+
+    def __str__(self):
+        return self.user.username
 
     def update_rating(self):
         author_posts_rat = 0
@@ -25,6 +29,9 @@ class Author(models.Model):
 
 class Category(models.Model):
     category_theme = models.CharField(max_length = 30, unique = True)
+
+    def __str__(self):
+        return self.category_theme
 
 class Post(models.Model):
     stat = "stat"
@@ -49,6 +56,8 @@ class Post(models.Model):
         return self.post_text[:124] + "..."
     def __str__(self):
         return self.post_text
+    def get_absolute_url(self):
+        return reverse('post-search')
 
 
 class PostCategory(models.Model):

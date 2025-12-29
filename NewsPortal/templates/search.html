@@ -6,15 +6,26 @@
 Posts
 {% endblock title %}
 
-
 {% block content %}
-    <style type="text/css">
+<div class="center-text">
+   <form action="" method="get">
+       {{ filterset.form.as_p }}
+       <input type="submit" value="Найти" />
+   </form>
+</div>
+
+<style type="text/css">
+      .center-text {
+    text-align: center;
+  }
         TABLE { width: 300px; /* Ширина таблицы */
                 border-collapse: collapse; /* Убираем двойные линии между ячейками */}
         TD, TH {padding: 3px; /* Поля вокруг содержимого таблицы */
                 border: 1px solid black; /* Параметры рамки */}
         TH {background: #b0e0e6; /* Цвет фона */}
+
     </style>
+<div class="center-text">
     <h2>Свежие новости</h2>
     <hr>
     <h3>На сайте размещено всего {{ lenght }} новостей</h3>
@@ -38,7 +49,7 @@ Posts
     {% else %}
         <h2>Новостей нет</h2>
     {% endif %}
-
+</div>
 
    {# Информация о предыдущих страницах #}
    {% if page_obj.has_previous %}
@@ -60,8 +71,4 @@ Posts
            <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
        {% endif %}
    {% endif %}
-
-
-
-
 {% endblock content %}
