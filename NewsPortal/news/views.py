@@ -1,4 +1,5 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Post
 from .filters import PostFilter
 from .forms import NewsForm
@@ -43,12 +44,14 @@ class PostSerchList(ListView):
         context['lenght'] = len(self.context_object_name)
         return context
 
-class CreateNews(CreateView):
+class CreateNews(PermissionRequiredMixin,CreateView):
+    permission_required = 'news.add_post'
     model = Post
     template_name = 'news_create.html'
     form_class = NewsForm
 
-class CreateArticle(CreateView):
+class CreateArticle(PermissionRequiredMixin, CreateView):
+    permission_required = 'news.add_post'
     model = Post
     template_name = 'article_create.html'
     form_class = NewsForm
@@ -59,7 +62,8 @@ class CreateArticle(CreateView):
             post.post_type = 'stat'
             return super().form_valid(form)
 
-class UpdateArticle(UpdateView):
+class UpdateArticle(PermissionRequiredMixin, UpdateView):
+    permission_required = 'news.change_post'
     form_class = NewsForm
     template_name = 'article_edit.html'
     model = Post
@@ -69,7 +73,8 @@ class DeleteArticle(DeleteView):
     template_name = 'article_delete.html'
     success_url = reverse_lazy('post-search')
 
-class UpdateNews(UpdateView):
+class UpdateNews(PermissionRequiredMixin, UpdateView):
+    permission_required = 'news.change_post'
     form_class = NewsForm
     model = Post
     template_name = 'news_edit.html'
@@ -78,3 +83,4 @@ class DeleteNews(DeleteView):
     model = Post
     template_name = 'news_delete.html'
     success_url = reverse_lazy('post-search')
+

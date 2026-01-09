@@ -1,0 +1,11 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+Вы успешно зарегестрированы
+<br>
+<a href='/news/search'>Для поиска новостей статьи нажмите</a>
+<br>
+{% if is_not_author %}
+<button> <a href="/upgrade/"> Хочу быть автором!</a> </button>
+{% endif %}
+{% endblock %}
