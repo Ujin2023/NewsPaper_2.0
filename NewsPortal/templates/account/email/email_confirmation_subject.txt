@@ -1,0 +1,3 @@
+{% load account %}
+{% user_display user as user_display %}
+Здравствуйте, {{ user_display }}!

@@ -1,10 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from .models import Post
+from .models import Post, CategoryAuthor, Category
 from .filters import PostFilter
 from .forms import NewsForm
 from pprint import pprint
 from django.urls import reverse_lazy
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
 
 
 class PostList(ListView):
@@ -79,8 +82,36 @@ class UpdateNews(PermissionRequiredMixin, UpdateView):
     model = Post
     template_name = 'news_edit.html'
 
+    def form_valid(self, form):
+        form.save(commit=False)
+        send_mail(subject=form.cleaned_data['post_title'],
+                  from_email='udalov9494@mail.ru',
+                  message=f"{form.cleaned_data['author']} изменил статью {form.cleaned_data['post_title']}",
+                  recipient_list=['udalov9494@yandex.ru'], )
+        return super().form_valid(form)
+
 class DeleteNews(DeleteView):
     model = Post
     template_name = 'news_delete.html'
     success_url = reverse_lazy('post-search')
 
+class CategoryList(ListView):
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'caregories.html'
+    pprint(context_object_name)
+
+
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = get_object_or_404(Category, id=pk)
+
+    # Проверяем, нет ли уже такой подписки, и создаем её через промежуточную модель
+    CategoryAuthor.objects.get_or_create(
+        category_author=category,
+        author_category=request.user
+    )
+
+    return redirect('/news/categories')

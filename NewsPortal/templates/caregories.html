@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h2>Доступные категории</h2>
+<div class="list-group">
+    {% for cat in categories %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            {{ cat.category_theme }}
+
+            {% if user.is_authenticated %}
+                {% if user in cat.subscribers.all %}
+                    <span class="badge bg-success">Вы подписаны</span>
+                {% else %}
+                    <a href="{% url 'subscribe' cat.id %}" class="btn btn-sm btn-primary">Подписаться</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock content %}
