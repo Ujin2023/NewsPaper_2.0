@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse
+
 
 
 class PostList(ListView):
@@ -22,6 +24,10 @@ class PostList(ListView):
         context = super().get_context_data(**kwargs)
         context['lenght'] = len(self.context_object_name)
         return context
+
+    def get(self, request, *args, **kwargs):
+        hello.delay()
+        return HttpResponse("Hello, world. You're at the post list.")
 
 class PostforDetail(DetailView):
     model = Post

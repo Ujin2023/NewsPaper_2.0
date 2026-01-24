@@ -11,7 +11,6 @@ def notify(sender, instance, action, **kwargs):
 # которая хранит в себе True или False в зависимости от того, как вы могли догадаться, есть ли такой объект в базе или нет
         if action == 'post_add':
             categories = instance.post_category.all()
-            pprint(categories)
             subscribers_emails = []
             for category in categories:
                 subscribers_emails += [s.email for s in category.subscribers.all()]
