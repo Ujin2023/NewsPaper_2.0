@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
-
+from django.core.cache import cache
 
 
 class PostList(ListView):
@@ -25,14 +25,20 @@ class PostList(ListView):
         context['lenght'] = len(self.context_object_name)
         return context
 
-    def get(self, request, *args, **kwargs):
-        hello.delay()
-        return HttpResponse("Hello, world. You're at the post list.")
+
 
 class PostforDetail(DetailView):
     model = Post
     context_object_name = 'post'
     template_name = 'post.html'
+
+    def get_object(self, *args, **kwargs):
+        obj = obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+
+        return obj
 
 class PostSerchList(ListView):
     model = Post
@@ -50,8 +56,10 @@ class PostSerchList(ListView):
         context = super().get_context_data(**kwargs)
         # Добавляем в контекст объект фильтрации.
         context['filterset'] = self.filterset
-        context['lenght'] = len(self.context_object_name)
+        context['lenght'] = len(self.get_queryset())
         return context
+
+
 
 class CreateNews(PermissionRequiredMixin,CreateView):
     permission_required = 'news.add_post'
